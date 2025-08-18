@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["komagata"]
   spec.email = ["komagata@gmail.com"]
 
-  spec.summary = "Minimal feature flag gem for Rails"
-  spec.description = "Simple boolean feature flags stored in database for Rails 6.1+"
+  spec.summary = "Minimal feature flag gem"
+  spec.description = "Simple boolean feature flags stored in database with web admin interface"
   spec.homepage = "https://github.com/komagata/switchlet"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.2.0"

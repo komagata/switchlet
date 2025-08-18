@@ -1,6 +1,6 @@
 # Switchlet
 
-Minimal feature flag gem for Rails 6.1+. Simple boolean feature flags stored in database.
+Minimal feature flag gem. Simple boolean feature flags stored in database with web admin interface.
 
 ## Installation
 
@@ -155,7 +155,7 @@ rake switchlet:delete[feature_name]
 - No caching - reads directly from database
 - Unregistered flags return `false`
 - No YAML/ENV/actor/percentage support
-- Rails 6.1+ required
+- Requires Rails 6.1 or later
 
 ## Development
 
