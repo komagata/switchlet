@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    switchlet (0.1.0)
+    switchlet (0.1.4)
       rails (>= 6.1)
 
 GEM

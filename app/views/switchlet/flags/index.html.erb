@@ -128,6 +128,9 @@
       display: flex;
       gap: 8px;
     }
+    .actions form {
+      margin: 0;
+    }
     .empty-state {
       text-align: center;
       padding: 40px;
@@ -184,15 +187,15 @@
               <td><%= flag[:updated_at].strftime("%Y-%m-%d %H:%M") %></td>
               <td>
                 <div class="actions">
-                  <%= link_to switchlet.toggle_flag_path(flag[:name]), 
-                            method: :patch, 
-                            class: "btn #{flag[:enabled] ? 'btn-secondary' : 'btn-success'}" do %>
+                  <%= button_to switchlet.toggle_flag_path(flag[:name]),
+                              method: :patch,
+                              class: "btn #{flag[:enabled] ? 'btn-secondary' : 'btn-success'}" do %>
                     <%= flag[:enabled] ? 'Disable' : 'Enable' %>
                   <% end %>
-                  <%= link_to switchlet.flag_path(flag[:name]), 
-                            method: :delete, 
-                            class: "btn btn-danger",
-                            confirm: "Are you sure you want to delete '#{flag[:name]}'?" do %>
+                  <%= button_to switchlet.flag_path(flag[:name]),
+                              method: :delete,
+                              class: "btn btn-danger",
+                              confirm: "Are you sure you want to delete '#{flag[:name]}'?" do %>
                     Delete
                   <% end %>
                 </div>
