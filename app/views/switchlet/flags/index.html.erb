@@ -254,8 +254,9 @@
               <td><%= flag[:updated_at].strftime("%Y-%m-%d %H:%M") %></td>
               <td>
                 <div class="actions">
-                  <%= button_to switchlet.toggle_flag_path(flag[:name]),
+                  <%= button_to switchlet.flag_path(flag[:name]),
                               method: :patch,
+                              params: { action_type: 'toggle' },
                               class: "btn #{flag[:enabled] ? 'btn-secondary' : 'btn-success'}" do %>
                     <%= flag[:enabled] ? 'Disable' : 'Enable' %>
                   <% end %>
