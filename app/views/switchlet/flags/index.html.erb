@@ -233,7 +233,8 @@
                     <% end %>
                   </span>
                   <div class="description-edit" style="display: none;">
-                    <%= form_with url: switchlet.flag_path(flag[:name]), method: :patch, local: true, class: "description-form" do |form| %>
+                    <%= form_with url: switchlet.flag_path(flag[:name]), local: true, class: "description-form" do |form| %>
+                      <%= hidden_field_tag :_method, 'patch' %>
                       <%= form.text_area :description, value: flag[:description], rows: 2, 
                                         class: "description-input", 
                                         placeholder: "Enter description..." %>
