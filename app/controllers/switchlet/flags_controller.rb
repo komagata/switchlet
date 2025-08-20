@@ -21,12 +21,20 @@ module Switchlet
 
     def create
       flag_name = params[:flag_name].strip
+      description = params[:description]&.strip
       if flag_name.present?
-        Switchlet.enable!(flag_name)
+        Switchlet.enable!(flag_name, description: description)
         redirect_to switchlet.flags_path, notice: "Flag '#{flag_name}' created and enabled"
       else
         redirect_to switchlet.flags_path, alert: "Flag name cannot be empty"
       end
+    end
+
+    def update
+      flag_name = params[:name]
+      description = params[:description]
+      Switchlet.set_description!(flag_name, description)
+      redirect_to switchlet.flags_path, notice: "Description updated for '#{flag_name}'"
     end
 
     def destroy

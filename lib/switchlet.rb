@@ -21,15 +21,19 @@ module Switchlet
     Flag.find_by(name: name.to_s)&.enabled || false
   end
 
-  def self.enable!(name)
+  def self.enable!(name, description: nil)
     flag = Flag.find_or_create_by(name: name.to_s)
-    flag.update!(enabled: true)
+    attrs = { enabled: true }
+    attrs[:description] = description if description
+    flag.update!(attrs)
     true
   end
 
-  def self.disable!(name)
+  def self.disable!(name, description: nil)
     flag = Flag.find_or_create_by(name: name.to_s)
-    flag.update!(enabled: false)
+    attrs = { enabled: false }
+    attrs[:description] = description if description
+    flag.update!(attrs)
     false
   end
 
@@ -43,8 +47,15 @@ module Switchlet
       {
         name: flag.name,
         enabled: flag.enabled,
+        description: flag.description,
         updated_at: flag.updated_at
       }
     end
+  end
+
+  def self.set_description!(name, description)
+    flag = Flag.find_or_create_by(name: name.to_s)
+    flag.update!(description: description)
+    flag.description
   end
 end

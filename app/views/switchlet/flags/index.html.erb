@@ -53,15 +53,25 @@
     }
     .form-group {
       display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .form-row {
+      display: flex;
       gap: 10px;
       align-items: center;
     }
-    input[type="text"] {
+    input[type="text"], textarea {
       flex: 1;
       padding: 8px 12px;
       border: 1px solid #ddd;
       border-radius: 4px;
       font-size: 14px;
+      font-family: inherit;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 40px;
     }
     .btn {
       padding: 8px 16px;
@@ -136,6 +146,36 @@
       padding: 40px;
       color: #7f8c8d;
     }
+    .text-muted {
+      color: #7f8c8d;
+      font-style: italic;
+    }
+    .description-cell {
+      min-width: 200px;
+    }
+    .description-text {
+      cursor: pointer;
+      display: block;
+      min-height: 20px;
+      padding: 4px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+    .description-text:hover {
+      background-color: #f8f9fa;
+    }
+    .description-input {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+    .description-actions {
+      display: flex;
+      gap: 4px;
+    }
+    .btn-sm {
+      padding: 4px 8px;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
@@ -154,8 +194,11 @@
       <h2>Create New Flag</h2>
       <%= form_with url: switchlet.flags_path, local: true do |form| %>
         <div class="form-group">
-          <%= form.text_field :flag_name, placeholder: "Enter flag name...", required: true %>
-          <%= form.submit "Create Flag", class: "btn btn-primary" %>
+          <div class="form-row">
+            <%= form.text_field :flag_name, placeholder: "Enter flag name...", required: true %>
+            <%= form.submit "Create Flag", class: "btn btn-primary" %>
+          </div>
+          <%= form.text_area :description, placeholder: "Optional description...", rows: 2 %>
         </div>
       <% end %>
     </div>
@@ -170,6 +213,7 @@
         <thead>
           <tr>
             <th>Flag Name</th>
+            <th>Description</th>
             <th>Status</th>
             <th>Last Updated</th>
             <th>Actions</th>
@@ -179,6 +223,28 @@
           <% @flags.each do |flag| %>
             <tr>
               <td><strong><%= flag[:name] %></strong></td>
+              <td>
+                <div class="description-cell" data-flag="<%= flag[:name] %>">
+                  <span class="description-text" onclick="editDescription('<%= flag[:name] %>')">
+                    <% if flag[:description].present? %>
+                      <%= flag[:description] %>
+                    <% else %>
+                      <span class="text-muted">Click to add description</span>
+                    <% end %>
+                  </span>
+                  <div class="description-edit" style="display: none;">
+                    <%= form_with url: switchlet.flag_path(flag[:name]), method: :patch, local: true, class: "description-form" do |form| %>
+                      <%= form.text_area :description, value: flag[:description], rows: 2, 
+                                        class: "description-input", 
+                                        placeholder: "Enter description..." %>
+                      <div class="description-actions">
+                        <%= form.submit "Save", class: "btn btn-success btn-sm" %>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="cancelEdit('<%= flag[:name] %>')">Cancel</button>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </td>
               <td>
                 <span class="<%= flag[:enabled] ? 'status-enabled' : 'status-disabled' %>">
                   <%= flag[:enabled] ? 'ENABLED' : 'DISABLED' %>
@@ -206,5 +272,39 @@
       </table>
     <% end %>
   </div>
+
+  <script>
+    function editDescription(flagName) {
+      const cell = document.querySelector(`[data-flag="${flagName}"]`);
+      const textSpan = cell.querySelector('.description-text');
+      const editDiv = cell.querySelector('.description-edit');
+      const input = cell.querySelector('.description-input');
+      
+      textSpan.style.display = 'none';
+      editDiv.style.display = 'block';
+      input.focus();
+      input.select();
+    }
+
+    function cancelEdit(flagName) {
+      const cell = document.querySelector(`[data-flag="${flagName}"]`);
+      const textSpan = cell.querySelector('.description-text');
+      const editDiv = cell.querySelector('.description-edit');
+      
+      textSpan.style.display = 'block';
+      editDiv.style.display = 'none';
+    }
+
+    // Escape key to cancel editing
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const activeEdit = document.querySelector('.description-edit[style*="block"]');
+        if (activeEdit) {
+          const flagName = activeEdit.closest('[data-flag]').dataset.flag;
+          cancelEdit(flagName);
+        }
+      }
+    });
+  </script>
 </body>
 </html>

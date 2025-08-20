@@ -84,4 +84,56 @@ class SwitchletTest < Minitest::Test
     Switchlet.enable!(:symbol_flag)
     assert_equal true, Switchlet.enabled?("symbol_flag")
   end
+
+  def test_enable_with_description
+    Switchlet.enable!(:test_flag, description: "Test description")
+    
+    list = Switchlet.list
+    flag = list.find { |f| f[:name] == "test_flag" }
+    
+    assert_equal "Test description", flag[:description]
+    assert_equal true, flag[:enabled]
+  end
+
+  def test_disable_with_description
+    Switchlet.disable!(:test_flag, description: "Disabled for testing")
+    
+    list = Switchlet.list
+    flag = list.find { |f| f[:name] == "test_flag" }
+    
+    assert_equal "Disabled for testing", flag[:description]
+    assert_equal false, flag[:enabled]
+  end
+
+  def test_set_description
+    Switchlet.enable!(:test_flag)
+    result = Switchlet.set_description!(:test_flag, "Updated description")
+    
+    assert_equal "Updated description", result
+    
+    list = Switchlet.list
+    flag = list.find { |f| f[:name] == "test_flag" }
+    assert_equal "Updated description", flag[:description]
+  end
+
+  def test_list_includes_description
+    Switchlet.enable!(:flag_with_desc, description: "Has description")
+    Switchlet.enable!(:flag_without_desc)
+
+    list = Switchlet.list
+    flag_with = list.find { |f| f[:name] == "flag_with_desc" }
+    flag_without = list.find { |f| f[:name] == "flag_without_desc" }
+
+    assert_equal "Has description", flag_with[:description]
+    assert_nil flag_without[:description]
+  end
+
+  def test_enable_without_description_preserves_existing
+    Switchlet.enable!(:test_flag, description: "Original description")
+    Switchlet.enable!(:test_flag) # No description parameter
+    
+    list = Switchlet.list
+    flag = list.find { |f| f[:name] == "test_flag" }
+    assert_equal "Original description", flag[:description]
+  end
 end

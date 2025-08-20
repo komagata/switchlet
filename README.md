@@ -27,14 +27,23 @@ Switchlet.enabled?(:my_feature)  # => false
 # Enable a feature
 Switchlet.enable!(:my_feature)   # => true
 
+# Enable a feature with description
+Switchlet.enable!(:my_feature, description: "New payment system")   # => true
+
 # Disable a feature
 Switchlet.disable!(:my_feature)  # => false
+
+# Disable with description
+Switchlet.disable!(:my_feature, description: "Temporarily disabled")  # => false
+
+# Set or update description
+Switchlet.set_description!(:my_feature, "Updated description")  # => "Updated description"
 
 # Delete a feature flag
 Switchlet.delete!(:my_feature)   # => nil
 
-# List all feature flags
-Switchlet.list  # => [{ name: "my_feature", enabled: true, updated_at: Time }]
+# List all feature flags (includes descriptions)
+Switchlet.list  # => [{ name: "my_feature", enabled: true, description: "New payment system", updated_at: Time }]
 ```
 
 ## Web UI
@@ -47,9 +56,10 @@ mount Switchlet::Engine => "/switchlet"
 ```
 
 Then visit `/switchlet` in your browser to:
-- View all feature flags
+- View all feature flags with descriptions
 - Toggle flags ON/OFF
-- Create new flags
+- Create new flags with optional descriptions
+- Edit descriptions inline (click to edit)
 - Delete existing flags
 
 ### Securing the Web Interface
