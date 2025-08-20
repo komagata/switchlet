@@ -1,4 +1,4 @@
-# Switchlet
+# 🎛️ Switchlet
 
 Minimal feature flag gem. Simple boolean feature flags stored in database with web admin interface.
 
