@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "Simple boolean feature flags stored in database with web admin interface"
   spec.homepage = "https://github.com/komagata/switchlet"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.2.0"
+  spec.required_ruby_version = ">= 3.1.6"
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
   spec.metadata["homepage_uri"] = spec.homepage
