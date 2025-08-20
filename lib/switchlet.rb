@@ -53,9 +53,12 @@ module Switchlet
     end
   end
 
-  def self.set_description!(name, description)
+  def self.update!(name, description: nil, enabled: nil)
     flag = Flag.find_or_create_by(name: name.to_s)
-    flag.update!(description: description)
-    flag.description
+    attrs = {}
+    attrs[:description] = description unless description.nil?
+    attrs[:enabled] = enabled unless enabled.nil?
+    flag.update!(attrs) if attrs.any?
+    flag
   end
 end

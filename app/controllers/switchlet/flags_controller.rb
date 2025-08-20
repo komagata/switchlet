@@ -35,7 +35,7 @@ module Switchlet
       # Handle description update
       else
         description = params[:description]
-        Switchlet.set_description!(flag_name, description)
+        Switchlet.update!(flag_name, description: description)
         redirect_to switchlet.flags_path, notice: "Description updated for '#{flag_name}'"
       end
     end

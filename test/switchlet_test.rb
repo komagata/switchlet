@@ -105,11 +105,11 @@ class SwitchletTest < Minitest::Test
     assert_equal false, flag[:enabled]
   end
 
-  def test_set_description
+  def test_update_method
     Switchlet.enable!(:test_flag)
-    result = Switchlet.set_description!(:test_flag, "Updated description")
+    result = Switchlet.update!(:test_flag, description: "Updated description")
     
-    assert_equal "Updated description", result
+    assert_equal "Updated description", result.description
     
     list = Switchlet.list
     flag = list.find { |f| f[:name] == "test_flag" }

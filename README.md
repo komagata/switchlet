@@ -28,22 +28,63 @@ Switchlet.enabled?(:my_feature)  # => false
 Switchlet.enable!(:my_feature)   # => true
 
 # Enable a feature with description
-Switchlet.enable!(:my_feature, description: "New payment system")   # => true
+Switchlet.enable!(:my_feature)   # => true
 
 # Disable a feature
 Switchlet.disable!(:my_feature)  # => false
 
 # Disable with description
-Switchlet.disable!(:my_feature, description: "Temporarily disabled")  # => false
+Switchlet.disable!(:my_feature)  # => false
 
-# Set or update description
-Switchlet.set_description!(:my_feature, "Updated description")  # => "Updated description"
+# Update description or enabled status
+Switchlet.update!(:my_feature, description: "Updated description")  # => Flag object
+Switchlet.update!(:my_feature, enabled: false)  # => Flag object
+Switchlet.update!(:my_feature, description: "New description", enabled: true)  # => Flag object
 
 # Delete a feature flag
 Switchlet.delete!(:my_feature)   # => nil
 
 # List all feature flags (includes descriptions)
 Switchlet.list  # => [{ name: "my_feature", enabled: true, description: "New payment system", updated_at: Time }]
+```
+
+### Common Usage Patterns
+
+Feature flags are often combined with other conditions for more sophisticated control:
+
+```ruby
+# Time-based rollout: Enable feature after specific date
+if Switchlet.enabled?(:my_feature) && Time.current >= Time.zone.parse("2025-06-01 00:00:00")
+  # New feature implementation
+  render :new_checkout_process
+else
+  # Fallback to old implementation
+  render :old_checkout_process
+end
+
+# User-based gradual rollout: Enable for specific user segments
+if Switchlet.enabled?(:my_feature) && current_user.id % 4 == 0
+  # Enable for 25% of users (user IDs divisible by 4)
+  show_new_dashboard_ui
+else
+  show_classic_dashboard_ui
+end
+
+# Role-based access: Enable only for specific user roles
+if Switchlet.enabled?(:my_feature) && current_user.admin?
+  # Admin-only feature
+  render_admin_analytics_panel
+else
+  render_basic_stats
+end
+
+# Complex conditions: Combine multiple criteria
+if Switchlet.enabled?(:beta_features) && 
+   current_user.beta_tester? && 
+   Time.current.hour.between?(9, 17)
+  # Beta feature available only during business hours for beta testers
+  enable_experimental_features
+end
 ```
 
 ## Web UI
