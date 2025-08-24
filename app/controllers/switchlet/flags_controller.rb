@@ -6,7 +6,6 @@ module Switchlet
       @flags = Switchlet.list
     end
 
-
     def create
       flag_name = params[:flag_name].strip
       description = params[:description]&.strip
@@ -20,18 +19,18 @@ module Switchlet
 
     def update
       flag_name = params[:name]
-      
+
       # Handle toggle action
-      if params[:action_type] == 'toggle'
+      if params[:action_type] == "toggle"
         current_state = Switchlet.enabled?(flag_name)
-        
+
         if current_state
           Switchlet.disable!(flag_name)
         else
           Switchlet.enable!(flag_name)
         end
-        
-        redirect_to switchlet.flags_path, notice: "Flag '#{flag_name}' #{current_state ? 'disabled' : 'enabled'}"
+
+        redirect_to switchlet.flags_path, notice: "Flag '#{flag_name}' #{current_state ? "disabled" : "enabled"}"
       # Handle description update
       else
         description = params[:description]

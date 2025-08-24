@@ -4,8 +4,7 @@ require "ipaddr"
 
 module Switchlet
   class Configuration
-    attr_accessor :basic_auth_enabled, :basic_auth_username, :basic_auth_password
-    attr_accessor :allowed_ips
+    attr_accessor :basic_auth_enabled, :basic_auth_username, :basic_auth_password, :allowed_ips
     attr_reader :authenticate_block
 
     def initialize

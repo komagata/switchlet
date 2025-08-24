@@ -20,7 +20,7 @@ namespace :switchlet do
     abort "Please specify a flag name: rake switchlet:enable[flag_name]" if flag_name.blank?
 
     result = Switchlet.enable!(flag_name)
-    puts "Flag '#{flag_name}' #{result ? 'enabled' : 'failed to enable'}."
+    puts "Flag '#{flag_name}' #{result ? "enabled" : "failed to enable"}."
   end
 
   desc "Disable a feature flag"
@@ -29,7 +29,7 @@ namespace :switchlet do
     abort "Please specify a flag name: rake switchlet:disable[flag_name]" if flag_name.blank?
 
     result = Switchlet.disable!(flag_name)
-    puts "Flag '#{flag_name}' #{result ? 'already disabled' : 'disabled'}."
+    puts "Flag '#{flag_name}' #{result ? "already disabled" : "disabled"}."
   end
 
   desc "Delete a feature flag"

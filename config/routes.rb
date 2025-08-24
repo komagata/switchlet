@@ -3,5 +3,5 @@
 Switchlet::Engine.routes.draw do
   root "flags#index"
 
-  resources :flags, only: [:index, :create, :update, :destroy], param: :name
+  resources :flags, only: %i[index create update destroy], param: :name
 end

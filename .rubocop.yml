@@ -1,8 +1,40 @@
 AllCops:
-  TargetRubyVersion: 3.2
+  TargetRubyVersion: 3.1
+  NewCops: enable
+  SuggestExtensions: false
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
 Style/StringLiteralsInInterpolation:
   EnforcedStyle: double_quotes
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 20
+
+Metrics/BlockLength:
+  Max: 35
+  Exclude:
+    - 'test/**/*'
+    - 'spec/**/*'
+
+Metrics/ClassLength:
+  Max: 110
+  Exclude:
+    - 'test/**/*'
+
+Metrics/AbcSize:
+  Max: 20
+
+Naming/PredicateMethod:
+  Exclude:
+    - 'lib/switchlet.rb'
+
+Gemspec/RequireMFA:
+  Enabled: false
+
+Gemspec/DevelopmentDependencies:
+  Enabled: false

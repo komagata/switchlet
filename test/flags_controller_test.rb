@@ -12,7 +12,7 @@ class FlagsControllerTest < Minitest::Test
   def test_controller_file_exists
     controller_path = File.join(File.dirname(__FILE__), "../app/controllers/switchlet/flags_controller.rb")
     assert File.exist?(controller_path), "Controller file should exist"
-    
+
     # Read and verify controller structure
     content = File.read(controller_path)
     assert content.include?("class FlagsController"), "Should define FlagsController"
@@ -40,7 +40,7 @@ class FlagsControllerTest < Minitest::Test
     # Test creating a flag
     flag_name = "new_flag"
     description = "New flag description"
-    
+
     # Simulate create action logic
     if flag_name.strip.present?
       Switchlet.enable!(flag_name, description: description)
@@ -48,10 +48,10 @@ class FlagsControllerTest < Minitest::Test
     else
       success = false
     end
-    
+
     assert success
     assert Switchlet.enabled?(flag_name)
-    
+
     flag = Switchlet::Flag.find_by(name: flag_name)
     assert_equal description, flag.description
   end
@@ -59,9 +59,9 @@ class FlagsControllerTest < Minitest::Test
   def test_create_action_with_empty_name
     # Test with empty name
     flag_name = ""
-    
+
     success = flag_name.strip.present?
-    
+
     assert_equal false, success
   end
 
@@ -70,25 +70,25 @@ class FlagsControllerTest < Minitest::Test
     Switchlet.enable!("toggle_flag")
     original_state = Switchlet.enabled?("toggle_flag")
     assert original_state
-    
+
     # Simulate toggle logic
     if original_state
       Switchlet.disable!("toggle_flag")
     else
       Switchlet.enable!("toggle_flag")
     end
-    
+
     assert_equal false, Switchlet.enabled?("toggle_flag")
   end
 
   def test_update_description_logic
     # Setup a flag
     Switchlet.enable!("desc_flag")
-    
+
     # Simulate description update
     new_description = "Updated description"
     Switchlet.update!("desc_flag", description: new_description)
-    
+
     flag = Switchlet::Flag.find_by(name: "desc_flag")
     assert_equal new_description, flag.description
   end
@@ -97,28 +97,28 @@ class FlagsControllerTest < Minitest::Test
     # Setup a flag
     Switchlet.enable!("delete_flag")
     assert Switchlet.enabled?("delete_flag")
-    
+
     # Simulate destroy logic
     Switchlet.delete!("delete_flag")
-    
+
     assert_equal false, Switchlet.enabled?("delete_flag")
   end
 
   def test_controller_handles_various_scenarios
     # Test multiple flags creation and management
-    flags = ["flag1", "flag2", "flag3"]
-    
+    flags = %w[flag1 flag2 flag3]
+
     flags.each do |flag_name|
       Switchlet.enable!(flag_name, description: "Description for #{flag_name}")
     end
-    
+
     all_flags = Switchlet.list
     assert_equal 3, all_flags.length
-    
+
     # Test toggling
     Switchlet.disable!("flag2")
     assert_equal false, Switchlet.enabled?("flag2")
-    
+
     # Test deletion
     Switchlet.delete!("flag3")
     remaining_flags = Switchlet.list
@@ -128,19 +128,19 @@ class FlagsControllerTest < Minitest::Test
   def test_new_update_method
     # Test the new update! method
     Switchlet.enable!("update_test")
-    
+
     # Update only description
     Switchlet.update!("update_test", description: "New description")
     flag = Switchlet::Flag.find_by(name: "update_test")
     assert_equal "New description", flag.description
     assert_equal true, flag.enabled
-    
+
     # Update only enabled status
     Switchlet.update!("update_test", enabled: false)
     flag.reload
     assert_equal false, flag.enabled
     assert_equal "New description", flag.description
-    
+
     # Update both at once
     Switchlet.update!("update_test", description: "Updated again", enabled: true)
     flag.reload

@@ -13,6 +13,7 @@ module Switchlet
       # 1. Check custom authentication block (highest priority)
       if config.authenticate_block?
         return if instance_exec(self, &config.authenticate_block)
+
         render_access_denied
         return
       end
@@ -24,10 +25,10 @@ module Switchlet
       end
 
       # 3. Check Basic authentication
-      if config.basic_auth_configured?
-        authenticate_or_request_with_http_basic("Switchlet Admin") do |username, password|
-          username == config.basic_auth_username && password == config.basic_auth_password
-        end
+      return unless config.basic_auth_configured?
+
+      authenticate_or_request_with_http_basic("Switchlet Admin") do |username, password|
+        username == config.basic_auth_username && password == config.basic_auth_password
       end
     end
 

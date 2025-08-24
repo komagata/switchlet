@@ -74,7 +74,7 @@ class SwitchletTest < Minitest::Test
 
     list = Switchlet.list
     names = list.map { |f| f[:name] }
-    assert_equal ["a_flag", "m_flag", "z_flag"], names
+    assert_equal %w[a_flag m_flag z_flag], names
   end
 
   def test_name_conversion_to_string
@@ -87,20 +87,20 @@ class SwitchletTest < Minitest::Test
 
   def test_enable_with_description
     Switchlet.enable!(:test_flag, description: "Test description")
-    
+
     list = Switchlet.list
     flag = list.find { |f| f[:name] == "test_flag" }
-    
+
     assert_equal "Test description", flag[:description]
     assert_equal true, flag[:enabled]
   end
 
   def test_disable_with_description
     Switchlet.disable!(:test_flag, description: "Disabled for testing")
-    
+
     list = Switchlet.list
     flag = list.find { |f| f[:name] == "test_flag" }
-    
+
     assert_equal "Disabled for testing", flag[:description]
     assert_equal false, flag[:enabled]
   end
@@ -108,9 +108,9 @@ class SwitchletTest < Minitest::Test
   def test_update_method
     Switchlet.enable!(:test_flag)
     result = Switchlet.update!(:test_flag, description: "Updated description")
-    
+
     assert_equal "Updated description", result.description
-    
+
     list = Switchlet.list
     flag = list.find { |f| f[:name] == "test_flag" }
     assert_equal "Updated description", flag[:description]
@@ -131,7 +131,7 @@ class SwitchletTest < Minitest::Test
   def test_enable_without_description_preserves_existing
     Switchlet.enable!(:test_flag, description: "Original description")
     Switchlet.enable!(:test_flag) # No description parameter
-    
+
     list = Switchlet.list
     flag = list.find { |f| f[:name] == "test_flag" }
     assert_equal "Original description", flag[:description]
