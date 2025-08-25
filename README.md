@@ -91,6 +91,8 @@ end
 
 Switchlet includes a web interface for managing feature flags:
 
+![Web UI](./web-ui.png)
+
 ```ruby
 # Add to your routes.rb
 mount Switchlet::Engine => "/switchlet"
